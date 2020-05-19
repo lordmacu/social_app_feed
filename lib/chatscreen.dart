@@ -25,7 +25,7 @@ class ChatScreenState extends State<ChatScreen> {
     return new IconTheme(
       data: new IconThemeData(color: Colors.blue),
       child: new Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10.0),
         child: new Row(
           children: <Widget>[
             new Flexible(
@@ -37,7 +37,7 @@ class ChatScreenState extends State<ChatScreen> {
               ),
             ),
             new Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              margin: const EdgeInsets.symmetric(horizontal: 10.0),
               child: new IconButton(
                 icon: new Icon(Icons.send),
                 onPressed: () => _handleSubmit(textEditingController.text),
@@ -100,6 +100,7 @@ class ChatScreenState extends State<ChatScreen> {
           ),
           new Divider(height: 1.0,),
           new Container(
+            margin: EdgeInsets.only(bottom: 15),
             decoration: new BoxDecoration(
               color: Theme.of(context).cardColor,
             ),

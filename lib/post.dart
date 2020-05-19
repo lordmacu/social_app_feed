@@ -173,6 +173,7 @@ class _PostState extends State<Post>{
               Container(
                 margin: EdgeInsets.only(top: 10),
                 child: Card(
+                  elevation: 0,
 
                   child: Container(
                     padding: EdgeInsets.only(top: 10,bottom: 10,left: 10,right: 10),

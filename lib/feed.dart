@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:ipuc/chatmessage.dart';
@@ -7,6 +8,13 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'biblie.dart';
 import 'chatscreen.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import "dart:math";
+import 'andwers.dart';
+import 'messages.dart';
+import 'tickets.dart';
+import 'room.dart';
+import 'documents.dart';
 
 class Feed extends StatefulWidget {
   @override
@@ -14,8 +22,13 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  List<String> litems = ["1", "2", "Third", "4"];
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); // ADD THIS LINE
+  final GlobalKey<ScaffoldState> _scaffoldKey =
+      new GlobalKey<ScaffoldState>(); // ADD THIS LINE
+  PanelController _pc = new PanelController();
+  final _random = new Random();
+
+  int ScreenPopu = 0;
+  int typeFeed = 1;
 
   Future openPost() async {
     await Navigator.of(context).push(new MaterialPageRoute<int>(
@@ -34,6 +47,7 @@ class _FeedState extends State<Feed> {
         maintainState: true,
         fullscreenDialog: false));
   }
+
   Future openBiblie() async {
     await Navigator.of(context).push(new MaterialPageRoute<int>(
         builder: (BuildContext context) {
@@ -52,11 +66,35 @@ class _FeedState extends State<Feed> {
         fullscreenDialog: false));
   }
 
+  Widget showWidgetPopup() {
+    if (ScreenPopu == 1) {
+      return AnsWers();
+    }else
+    if (ScreenPopu == 2) {
+      return Messages();
+    }else
+    if (ScreenPopu == 3) {
+      return Ticket();
+    } else
+    if (ScreenPopu == 4) {
+      return Room();
+    } else
+    if (ScreenPopu == 5) {
+      return Documents();
+    }  else {
+      return Container(
+        child: Text(""),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      key: _scaffoldKey, // ADD THIS LINE
+      key: _scaffoldKey,
+      // ADD THIS LINE
 
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -70,7 +108,10 @@ class _FeedState extends State<Feed> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    Image.asset("assets/icon.png",width: 80,),
+                    Image.asset(
+                      "assets/icon.png",
+                      width: 80,
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 10),
                       child: Text("Cristian Garcia"),
@@ -83,7 +124,10 @@ class _FeedState extends State<Feed> {
               ),
             ),
             ListTile(
-              title: Text('Biblia',style: TextStyle(fontSize: 20),),
+              title: Text(
+                'Biblia',
+                style: TextStyle(fontSize: 20),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -92,360 +136,751 @@ class _FeedState extends State<Feed> {
               },
             ),
             ListTile(
-              title: Text('Mensajes',style: TextStyle(fontSize: 20),),
+              title: Text(
+                'Mensajes',
+                style: TextStyle(fontSize: 20),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
               },
-
             ),
             ListTile(
-              title: Text('Predicaciónes',style: TextStyle(fontSize: 20),),
+              title: Text(
+                'Predicaciónes',
+                style: TextStyle(fontSize: 20),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
               },
-
             ),
             ListTile(
-              title: Text('Videos',style: TextStyle(fontSize: 20),),
+              title: Text(
+                'Videos',
+                style: TextStyle(fontSize: 20),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
               },
-
             ),
             ListTile(
-              title: Text('Revista',style: TextStyle(fontSize: 20),),
+              title: Text(
+                'Revista',
+                style: TextStyle(fontSize: 20),
+              ),
               onTap: () {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.pop(context);
               },
-
             )
           ],
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffFAFBFC),
       appBar: AppBar(
         centerTitle: false,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffFAFBFC),
         title: Text(
-          "Noticias",
-          style: TextStyle(color: Colors.black),
+          "Toc Toc - Luna Park",
+          style: TextStyle(color: Colors.blueAccent),
           textAlign: TextAlign.left,
         ),
         leading: InkWell(
-          onTap: (){
+          onTap: () {
             _scaffoldKey.currentState.openDrawer(); // CHANGE THIS LINE
-
           },
           child: Container(
             child: Icon(
               Icons.menu,
-              color: Colors.black,
+              color: Colors.blueAccent,
             ),
           ),
         ),
         actions: <Widget>[
           InkWell(
-            onTap: (){
-              openChat();
+            onTap: () {
+             // openChat();
+              setState(() {
+                ScreenPopu = 2;
+              });
+              _pc.open();
             },
             child: Container(
               padding: EdgeInsets.only(right: 10),
               child: Icon(
                 EvaIcons.messageCircleOutline,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: (){
-              openBiblie();
-            },
-            child: Container(
-              padding: EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.search,
-                color: Colors.black,
+                color: Colors.blueAccent,
               ),
             ),
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: ListView.builder(
-                  itemCount: litems.length,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return Column(
-                      children: <Widget>[
-                        index == 0
-                            ? Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      padding:
-                                          EdgeInsets.only(right: 15, left: 10),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text(
-                                            "Iglesias",
-                                            textAlign: TextAlign.right,
-                                            style: TextStyle(fontSize: 25),
-                                          ),
-                                          Text(
-                                            "Ver más",
-                                            textAlign: TextAlign.right,
-                                          )
-                                        ],
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          left: 0, top: 15, bottom: 15),
-                                      margin: EdgeInsets.only(top: 5),
-                                      height: 160,
-                                      child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: 10,
-                                          itemBuilder:
-                                              (BuildContext ctxt, int index) {
-                                            return Container(
-                                              margin: EdgeInsets.only(
-                                                  right: 15,
-                                                  left: index == 0 ? 15 : 0),
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10))),
-                                                    height: 160,
-                                                    width: 90,
-                                                    child: TransitionToImage(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10)),
-                                                      image: AdvancedNetworkImage(
-                                                          "https://res.cloudinary.com/civico/image/upload/c_fit,f_auto,fl_lossy,h_1200,q_auto:low,w_1200/v1440792289/entity/image/file/006/000/55e0be94b9dd5dba39000006.jpg"),
-                                                      fit: BoxFit.cover,
-                                                      enableRefresh: true,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      height: 160,
-                                                      width: 90,
-                                                      child: Stack(
+      body: SlidingUpPanel(
+        renderPanelSheet: false,
+        backdropEnabled: true,
+        controller: _pc,
+        minHeight: 0,
+        maxHeight: height - 120,
+        panel: Container(
+          padding: EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 20.0,
+                  color: Colors.grey,
+                ),
+              ]),
+          child: showWidgetPopup(),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (BuildContext ctxt, int index) {
+                        return Column(
+                          children: <Widget>[
+                            index == 0
+                                ? Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: typeFeed==1 ?  Color(0xffEEEEEE) : Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
                                                         children: <Widget>[
-                                                          Align(
-                                                            child: Container(
-
-                                                              child: Text(
-                                                                "Ipuc La Victoria",
-
+                                                          Image.asset(
+                                                            "assets/anuncesd.png",
+                                                            width: 75,
+                                                          ),
+                                                          Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: <Widget>[
+                                                              Text(
+                                                                "Anuncios",
                                                                 style: TextStyle(
-                                                                    color:
-                                                                    Colors.white),
-                                                                textAlign: TextAlign.center,
-                                                              ),
-                                                              padding: EdgeInsets.only(bottom: 10,left: 10,right: 10),
-                                                            ),
-                                                            alignment: Alignment.bottomCenter,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w300),
+                                                              )
+                                                            ],
                                                           )
                                                         ],
                                                       ),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    10)),
-
-                                                        // Box decoration takes a gradient
-                                                        gradient:
-                                                            LinearGradient(
-                                                          // Where the linear gradient begins and ends
-                                                          begin: Alignment
-                                                              .topCenter,
-                                                          end: Alignment
-                                                              .bottomCenter,
-                                                          // Add one stop for each color. Stops should increase from 0 to 1
-                                                          stops: [
-                                                            0.1,
-                                                            0.5,
-                                                            0.7,
-                                                            0.9
-                                                          ],
-                                                          colors: [
-                                                            // Colors are easy thanks to Flutter's Colors class.
-                                                            Colors.transparent,
-                                                            Colors.transparent,
-                                                            Colors.black12,
-                                                            Colors.black45,
-                                                          ],
-                                                        ),
-                                                      ))
-                                                ],
-                                              ),
-                                            );
-                                          }),
-                                    )
-                                  ],
-                                ),
-                                margin: EdgeInsets.only(bottom: 5),
-                              )
-                            : Container(),
-                        Container(
-                          child: Column(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            child: Image.asset(
-                                              "assets/icon.png",
-                                              width: 40,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  "nombre",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
+                                                    )
+                                                  ],
                                                 ),
-                                                Text(
-                                                  "Presidente de jóvenes",
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.black38),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  typeFeed=1;
+                                                });
+                                              },
+                                            ),
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: typeFeed==0 ?  Color(0xffEEEEEE) : Colors.white,
+
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "assets/services.png",
+                                                            width: 75,
+                                                          ),
+                                                          Text(
+                                                            "Market",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  typeFeed=0;
+                                                });
+                                              },
+                                            ),
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "assets/talk.png",
+                                                            width: 75,
+                                                          ),
+                                                          Text(
+                                                            "Sugerencias",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  ScreenPopu = 3;
+                                                });
+                                                _pc.open();
+                                              },
+                                            )
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "assets/question.png",
+                                                            width: 75,
+                                                          ),
+                                                          Text(
+                                                            "Preguntas",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  ScreenPopu = 1;
+                                                });
+                                                _pc.open();
+                                              },
+                                            ),
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.all(
+                                                      Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                      Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                        MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "assets/calendar.png",
+                                                            width: 75,
+                                                          ),
+                                                          Text(
+                                                            "Alquiler Salón",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  ScreenPopu = 4;
+                                                });
+                                                _pc.open();
+                                              },
+                                            ),
+                                            GestureDetector(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                ),
+                                                child: Stack(
+                                                  children: <Widget>[
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "assets/documents.png",
+                                                            width: 75,
+                                                          ),
+                                                          Text(
+                                                            "Documentos",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                width: 110,
+                                                height: 110,
+                                                margin:
+                                                    EdgeInsets.only(left: 5),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  ScreenPopu = 5;
+                                                });
+                                                _pc.open();
+                                              },
+                                            ),
+
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                        ),
+                                      ],
+                                    ),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                  )
+                                : Container(),
+                            typeFeed == 0
+                                ? Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        GestureDetector(
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                left: 15, right: 15, top: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: Image.asset(
+                                                        "assets/icon.png",
+                                                        width: 40,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            "Cristian Camilo Garcia",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16),
+                                                          ),
+                                                          Text(
+                                                            "Administrador",
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black38),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
                                                 )
                                               ],
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        child: Icon(
-                                          Icons.more_vert,
-                                          color: Colors.grey,
+                                          ),
+                                          onTap: () {
+                                            openProfile();
+                                          },
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                onTap: () {
-                                  openProfile();
-                                },
-                              ),
-                              GestureDetector(
-                                child: Container(
-                                  width: double.infinity,
-                                  child: Image.asset(
-                                    "assets/full.jpeg",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                onTap: () {
-                                  openPost();
-                                },
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    InkWell(
-                                      onTap: () {
-                                        print("sss");
-                                      },
-                                      child: Container(
-                                        child: Icon(
-                                          EvaIcons.heartOutline,
-                                          color: Colors.black38,
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  Flexible(
+
+                                                    child: Text(
+                                                      "Nombre del Producto",
+                                                      style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight: FontWeight.w700
+                                                      ),
+                                                    ),
+                                                    flex: 5,
+                                                  ),
+                                                  Flexible(
+                                                    child: Text(
+                                                      "\$5.000",
+                                                      style: TextStyle(fontSize: 20,color: Colors.green),
+                                                    ),
+                                                    flex: 2,
+                                                  )
+                                                ],
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                              ),Container(
+                                                color: Colors.black26,
+                                                child: null,
+                                                width: double.infinity,
+                                                height: 0.5,
+                                                margin: EdgeInsets.only(top: 10),
+
+                                              )
+                                            ],
+                                          ),
+                                          padding: EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              top: 10,
+                                              bottom: 5),
                                         ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        print("aqui mano");
-                                      },
-                                      child: Container(
-                                        child: Row(
+                                        Container(
+                                          child: Text(
+                                              "Este es un textodafsd y puede ser muy largo o aunqeu tambien puede ser contigo"),
+                                          padding: EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              top: 15,
+                                              bottom: 10),
+                                        ),
+                                        Stack(
                                           children: <Widget>[
-                                            Icon(
-                                              EvaIcons.messageCircleOutline,
-                                              color: Colors.black38,
+                                            GestureDetector(
+                                              child: Container(
+                                                  width: double.infinity,
+                                                  child: TransitionToImage(
+                                                    image: AdvancedNetworkImage(
+                                                      "https://pix10.agoda.net/hotelImages/106/1060050/1060050_15082810180035249729.jpg?s=1024x768",
+                                                      loadedCallback: () {
+                                                        print('It works!');
+                                                      },
+                                                      loadFailedCallback: () {
+                                                        print('Oh, no!');
+                                                      },
+                                                    ),
+                                                    loadingWidgetBuilder: (_,
+                                                            double progress,
+                                                            __) =>
+                                                        Text(progress
+                                                            .toString()),
+                                                    fit: BoxFit.cover,
+                                                    placeholder: const Icon(
+                                                        Icons.refresh),
+                                                    height: 230.0,
+                                                    enableRefresh: true,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                  )),
+                                              onTap: () {
+                                                openPost();
+                                              },
                                             ),
-                                            Container(
-                                              padding: EdgeInsets.only(left: 5),
-                                              child: Text(
-                                                "Comentar",
-                                                style: TextStyle(
-                                                  color: Colors.black38,
+                                            Positioned(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  print("sss");
+                                                },
+                                                child: Container(
+                                                  child: Icon(
+                                                    EvaIcons.heart,
+                                                    color: Colors.redAccent,
+                                                    size: 30,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white70,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  40))),
+                                                  padding: EdgeInsets.all(5),
                                                 ),
                                               ),
+                                              bottom: 10,
+                                              right: 10,
                                             )
                                           ],
+                                        )
+                                      ],
+                                    ),
+                                    margin: EdgeInsets.only(
+                                        bottom: 15,
+                                        left: 10,
+                                        right: 10,
+                                        top: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    padding: EdgeInsets.only(top: 5),
+                                  )
+                                : Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        GestureDetector(
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                left: 15, right: 15, top: 5),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                      child: Image.asset(
+                                                        "assets/icon.png",
+                                                        width: 40,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            "Cristian Camilo Garcia",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16),
+                                                          ),
+                                                          Text(
+                                                            "Administrador",
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black38),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            openProfile();
+                                          },
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          margin: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 6.0,
-                                    spreadRadius: 0.4,
-                                    offset: Offset(0.5, 0.5)),
-                              ],
-                              color: Colors.white),
-                        )
-                      ],
-                    );
-                  }),
-            ),
-          )
-        ],
+                                        Container(
+                                          child: Text(
+                                              "Este es un ddd y puede ser muy largo o aunqeu tambien puede ser contigo"),
+                                          padding: EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                              top: 10,
+                                              bottom: 10),
+                                        ),
+                                        Stack(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              child: Container(
+                                                  width: double.infinity,
+                                                  child: TransitionToImage(
+                                                    image: AdvancedNetworkImage(
+                                                      "https://pix10.agoda.net/hotelImages/106/1060050/1060050_15082810180035249729.jpg?s=1024x768",
+                                                      loadedCallback: () {
+                                                        print('It works!');
+                                                      },
+                                                      loadFailedCallback: () {
+                                                        print('Oh, no!');
+                                                      },
+                                                    ),
+                                                    loadingWidgetBuilder: (_,
+                                                            double progress,
+                                                            __) =>
+                                                        Text(progress
+                                                            .toString()),
+                                                    fit: BoxFit.cover,
+                                                    placeholder: const Icon(
+                                                        Icons.refresh),
+                                                    height: 230.0,
+                                                    enableRefresh: true,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                10)),
+                                                  )),
+                                              onTap: () {
+                                                openPost();
+                                              },
+                                            ),
+                                            Positioned(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  print("sss");
+                                                },
+                                                child: Container(
+                                                  child: Icon(
+                                                    EvaIcons.heart,
+                                                    color: Colors.redAccent,
+                                                    size: 30,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white70,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  40))),
+                                                  padding: EdgeInsets.all(5),
+                                                ),
+                                              ),
+                                              bottom: 10,
+                                              right: 10,
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    margin: EdgeInsets.only(
+                                        bottom: 15,
+                                        left: 10,
+                                        right: 10,
+                                        top: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15))),
+                                    padding: EdgeInsets.only(top: 5),
+                                  )
+                          ],
+                        );
+                      }),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
